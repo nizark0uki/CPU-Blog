@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Blog | Feed</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>CPU Blog</header>
+    <div class="container">
+        <section id="members">
+            <h4>Membres Seniors</h4>
+            <input type="text" id="searchUser" placeholder="Find a member...">
+            <div id="membersList"></div>
+        </section>
+        <section id="feed">
+            <form class="newPost">
+                <img src="./images/cpu.png" alt="CPU">
+                <textarea id="new-post-text" placeholder="What's on your mind !"></textarea>
+                <button class="post" type="submit">Post</button>
+            </form>
+            <div class="posts">
+                <div class="post">
+                    <div class="user-info">
+                        <i class="fa fa-user avatar"></i>
+                        <div class="user-details">
+                            <h3>Koussay Attaya</h3>
+                            <p>Président</p>
+                        </div>
+                        
+                    </div>
+                    <p class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident libero natus exercitationem in, illo, distinctio id quo beatae magni voluptatibus labore, cupiditate laboriosam officia ad recusandae? Aliquam quibusdam laborum dolorum.
+                    </p>
+                    <div class="post-actions">
+                        <button class="like-button"><i class="fa-regular fa-heart"></i></button>
+                        <span class="like-count">0 Likes</span>
+                        <button class="comment-button"><i class="fa-regular fa-comment"></i></button>
+                        <span class="comment-count">0 Comments</span>
+                    </div>
+                    <div class="comments-section">
+                        <input type="text" class="comment-input" placeholder="Write your comment here">
+                        <button class="post-comment">Post</button>
+                        <ul class="comments-list"></ul>
+                    </div>
+                </div>
+
+                <div class="post">
+                    <div class="user-info">
+                        <i class="fa fa-user avatar"></i>
+                        <div class="user-details">
+                            <h3>Mazen Toraa</h3>
+                            <p>Responsable Formation</p>
+                        </div>
+                    </div>
+                    <p class="post-content">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident libero natus exercitationem in, illo, distinctio id quo beatae magni voluptatibus labore, cupiditate laboriosam officia ad recusandae? Aliquam quibusdam laborum dolorum.
+                    </p>
+                    <div class="post-actions">
+                        <button class="like-button"><i class="fa-regular fa-heart"></i></button>
+                        <span class="like-count">0 Likes</span>
+                        <button class="comment-button"><i class="fa-regular fa-comment"></i></button>
+                        <span class="comment-count">0 Comments</span>
+                    </div>
+                    <div class="comments-section">
+                        <input type="text" class="comment-input" placeholder="Write your comment here">
+                        <button class="post-comment">Post</button>
+                        <ul class="comments-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="events">
+            <h4>Events</h4>
+            <ul id="eventsList">
+                <li class="event">
+                    <h4>Isimm Cyberbot 4.0</h4>
+                    <p>16/02/2025</p>
+                </li>
+            </ul>
+            <input type="text" id="eventName" placeholder="Event's Name" required>
+            <input type="date" id="date" required>
+            <button id="addEventBtn">Add Event</button>
+        </section>
+    </div>
+</body>
+</html>
