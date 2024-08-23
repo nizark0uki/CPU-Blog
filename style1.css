@@ -292,5 +292,9 @@ input[type="date"]::-webkit-datetime-edit-fields-wrapper  {
 }
 
 #eventsList li h4 {
-    margin: 20px 0 10px 0 ;
+    margin: 20px 0 5px 0 ;
+}
+
+#eventsList li p {
+    padding-bottom: 20px;
 }
