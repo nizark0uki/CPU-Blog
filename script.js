@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const btn = document.getElementById('btn');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
-    const members = [
+
+    let members = JSON.parse(localStorage.getItem('members')) || [
         {
             fullname: "Koussay Attaya",
             position: "Président",
@@ -20,8 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             password: "123"
         }
     ];
-    
-    console.log(members);
+
     window.login = function() {
         formBox.classList.remove('active');
         btn.style.left = '0';
@@ -33,16 +33,18 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     if (formBox && btn && loginForm && signupForm) {
+
         signupForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const fullname = document.getElementById('fullname').value;
             const position = document.getElementById('position').value;
             const password = document.getElementById('password').value;
             members.push({ fullname, position, password });
+            localStorage.setItem('members', JSON.stringify(members));
             e.target.reset();
             alert('🟢 Signup succeeded');
-            
         });
+
 
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -63,71 +65,68 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    
     const newPostForm = document.querySelector('.newPost');
-    newPostForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const postText = document.getElementById('new-post-text').value.trim();
-        if (postText !== "") {
-            const loginName = localStorage.getItem('loginName') || 'Anonymous';
-            const position = localStorage.getItem('position') || 'Unknown';
+    if (newPostForm) {
+        newPostForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const postText = document.getElementById('new-post-text').value.trim();
+            if (postText !== "") {
+                const loginName = localStorage.getItem('loginName') || 'Anonymous';
+                const position = localStorage.getItem('position') || 'Unknown';
 
-            const postItem = document.createElement('div');
-            postItem.className = 'post';
+                const postItem = document.createElement('div');
+                postItem.className = 'post';
 
-            postItem.innerHTML = `
-                <div class="user-info">
-                    <i class="fa fa-user avatar"></i>
-                    <div class="user-details">
-                        <h3>${loginName}</h3>
-                        <p>${position}</p>
+                postItem.innerHTML = `
+                    <div class="user-info">
+                        <i class="fa fa-user avatar"></i>
+                        <div class="user-details">
+                            <h3>${loginName}</h3>
+                            <p>${position}</p>
+                        </div>
                     </div>
-                </div>
-                <p class="post-content">${postText}</p>
-                <div class="post-actions">
-                    <button class="like-button"><i class="fa-regular fa-heart"></i></button>
-                    <span class="like-count">0 Likes</span>
-                    <button class="comment-button"><i class="fa-regular fa-comment"></i></button>
-                    <span class="comment-count">0 Comments</span>
-                </div>
-                <div class="comments-section">
-                    <input type="text" class="comment-input" placeholder="Write your comment here">
-                    <button class="post-comment">Post</button>
-                    <ul class="comments-list"></ul>
-                </div>
-            `;
+                    <p class="post-content">${postText}</p>
+                    <div class="post-actions">
+                        <button class="like-button"><i class="fa-regular fa-heart"></i></button>
+                        <span class="like-count">0 Likes</span>
+                        <button class="comment-button"><i class="fa-regular fa-comment"></i></button>
+                        <span class="comment-count">0 Comments</span>
+                    </div>
+                    <div class="comments-section">
+                        <input type="text" class="comment-input" placeholder="Write your comment here">
+                        <button class="post-comment">Post</button>
+                        <ul class="comments-list"></ul>
+                    </div>
+                `;
 
-            // Prepend the new post to the .posts container
-            document.querySelector('.posts').prepend(postItem);
+                document.querySelector('.posts').prepend(postItem);
+                document.getElementById('new-post-text').value = "";
+            }
+        });
 
-            // Clear textarea
-            document.getElementById('new-post-text').value = "";
-        }
-    });
+        document.addEventListener('click', function (event) {
+            const target = event.target;
+            const post = target.closest('.post');
 
+            if (post) {
+                if (target.classList.contains('like-button') || target.closest('.like-button')) {
+                    handleLike(post);
+                } else if (target.classList.contains('comment-button') || target.closest('.comment-button')) {
+                    focusCommentInput(post);
+                } else if (target.classList.contains('post-comment') || target.closest('.post-comment')) {
+                    handleComment(post);
+                }
+            }
+        });
 
-    document.addEventListener('click', function (event) {
-        const target = event.target;
-        const post = target.closest('.post');
-
-        if (post) {
-            if (target.classList.contains('like-button') || target.closest('.like-button')) {
-                handleLike(post);
-            } else if (target.classList.contains('comment-button') || target.closest('.comment-button')) {
-                focusCommentInput(post);
-            } else if (target.classList.contains('post-comment') || target.closest('.post-comment')) {
+        document.addEventListener('keypress', function (event) {
+            if (event.target.classList.contains('comment-input') && event.key === 'Enter') {
+                event.preventDefault();
+                const post = event.target.closest('.post');
                 handleComment(post);
             }
-        }
-    });
-
-    document.addEventListener('keypress', function (event) {
-        if (event.target.classList.contains('comment-input') && event.key === 'Enter') {
-            event.preventDefault();
-            const post = event.target.closest('.post');
-            handleComment(post);
-        }
-    });
+        });
+    }
 
     function handleLike(post) {
         const likeBtn = post.querySelector('.like-button');
@@ -186,14 +185,13 @@ document.addEventListener('DOMContentLoaded', function () {
             commentInput.value = "";
 
             const commentCountElem = post.querySelector('.comment-count');
-            
-var commentCount = parseInt(commentCountElem.innerText) || 0;
+            var commentCount = parseInt(commentCountElem.innerText) || 0;
             commentCount++;
             commentCountElem.innerText = `${commentCount} Comments`;
         }
     }
 
-
+    
     const membersList = document.getElementById('membersList');
     const searchInput = document.getElementById('searchUser');
 
@@ -222,24 +220,23 @@ var commentCount = parseInt(commentCountElem.innerText) || 0;
             memberDetails.appendChild(position);
             memberInfo.appendChild(avatar);
             memberInfo.appendChild(memberDetails);
-
             memberItem.appendChild(memberInfo);
+
             membersList.appendChild(memberItem);
         });
     }
 
-    function filterMembers(query) {
-        const lowerCaseQuery = query.toLowerCase();
-        const filteredMembers = members.filter(member => 
-            member.fullname.toLowerCase().includes(lowerCaseQuery) ||
-            member.position.toLowerCase().includes(lowerCaseQuery)
-        );
-        renderMembers(filteredMembers);
+    if (membersList && searchInput) {
+        renderMembers(members);
+
+        searchInput.addEventListener('input', function(e) {
+            const searchText = e.target.value.toLowerCase();
+            const filteredMembers = members.filter(member => 
+                member.fullname.toLowerCase().includes(searchText)
+            );
+            renderMembers(filteredMembers);
+        });
     }
-    renderMembers(members);
-    searchInput.addEventListener('input', function () {
-        filterMembers(searchInput.value);
-    });
 
     const eventBtn = document.getElementById('addEventBtn');
     eventBtn.addEventListener('click', function(){
@@ -255,5 +252,4 @@ var commentCount = parseInt(commentCountElem.innerText) || 0;
         eventsList.appendChild(newEvent);
 
     })
-
 });
